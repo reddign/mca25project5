@@ -1,0 +1,21 @@
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    max-width: 800px;
+    background-color:#f6e1fc;
+    padding: 20px;
+    margin: 0 auto;
+}
+
+heading{
+    color:rgb(45, 44, 44);
+    text-align: center;
+}
+
+h1{
+    list-style-type: none;
+    margin: 0;
+    padding: 10;
+    overflow: hidden;
+    background-color: #858ed1;
+}
+
