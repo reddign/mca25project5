@@ -5,8 +5,8 @@
 // Implement board clear.
 let canvas= document.querySelector("canvas")
 let graphics = canvas.getContext("2d")
-graphics.strokeRect(0,0,canvas.width,canvas.height)
-let boardSize=1
+
+let boardSize=0
 let rowColCount=100
 let squareSize = 30
 let currentMineCount=10
@@ -18,6 +18,19 @@ let mouseX=-900
 let mouseY=-900
 let gameOver=false
 //Board is 300x300.
+
+graphics.strokeRect(0,0,canvas.width,canvas.height)
+graphics.strokeRect(0,canvas.height-100,canvas.width,100)
+graphics.fillStyle="black"
+graphics.font="20px serif"
+graphics.fillText("Select a board size.",70,320)
+
+graphics.strokeRect(20,340,60,30)
+graphics.fillText("10x10",25,360)
+graphics.strokeRect(120,340,60,30)
+graphics.fillText("15x15",125,360)
+graphics.strokeRect(220,340,60,30)
+graphics.fillText("20x20",225,360)
 //List of squares. Position 0: x, P1: y, P2: mine, P3: adjac. mines P4: RowIndex P5: ColIndex
 // P6: Hidden/Revealed 
 let squareList=[[0,0,0,0,0,0,0]]
@@ -27,8 +40,34 @@ function mousePress(event){
     mouseX = event.clientX-canvasrect.left
     mouseY = event.clientY-canvasrect.top
     console.log(mouseX,mouseY)
-    adjacencyCheck(mouseX,mouseY)
+    // Initial setup.
+    if (boardSize==0){
+        if (340<mouseY && mouseY<370){
+            if(20<mouseX && mouseX<80){
+                console.log("Small", mouseX)
+                graphics.font="20px Serif"
+                boardSize=1
+                initialize()
+            } 
+            if(120<mouseX && mouseX<180){
+                console.log("Med", mouseX)
+                graphics.font="14px Serif"
+                boardSize=2
+                initialize()
+            } 
+            if(220<mouseX && mouseX<280){
+                console.log("Large", mouseX)
+                graphics.font="10px Serif"
+                boardSize=3
+                initialize()
+            } 
+        }
     }
+    if (boardSize!=0 && gameOver!=true){
+    adjacencyCheck(mouseX,mouseY)
+    animate()
+    }
+}
 
 
 function adjacencyCheck(x,y){
@@ -172,7 +211,7 @@ function initialize(){
     let i=0
     let v=0
     let c = 0
-    boardSize=prompt("What board size do you want? 1 - 10x10 2 - 15x15 3 - 20x20")
+    
     
     if (boardSize==1){
         console.log("1")
@@ -205,7 +244,7 @@ function initialize(){
     hideMines()
     
     // Sets up the numbers that display the amount of adjacent mines..
-    gameOver="intiializing"
+    gameOver="intitializing"
     c=0
     for (let i = 0; i<rowColCount; i++){
             for (let v = 0; v<rowColCount; v++){
@@ -216,11 +255,14 @@ function initialize(){
             }
         }
     gameOver=false
+    console.log(squareList[rowColCount-1])
     showSafeSquare()
+    console.log(squareList[rowColCount-1])
 }
 
 function drawBoard(){
     let c = 1
+    uncleared=rowColCount*rowColCount
     for (let i = 0; i<rowColCount;){
         for (let v = 0; v<rowColCount;){
             
@@ -229,6 +271,7 @@ function drawBoard(){
             if (squareList[c][6]==1){
                 graphics.fillStyle=clearColor
                 graphics.fillRect(squareList[c][0],squareList[c][1],squareSize,squareSize)
+                uncleared-=1
             }  
             else if (i%2!=v%2){
                 graphics.fillStyle=squareColor1
@@ -241,17 +284,23 @@ function drawBoard(){
                 
             }
 
+            //Check if only mines remain uncleared.
+            if (uncleared==currentMineCount){
+                graphics.fillStyle="red"
+                graphics.fillText("You win ",100,345)
+            }
+
             // How many mines are adjacent?
             if (squareList[c][6]==1){
                 graphics.fillStyle="white"
-                graphics.fillText(squareList[c][3],squareList[c][0]+(squareSize/2),squareList[c][1]+(squareSize/2))
+                graphics.fillText(squareList[c][3],squareList[c][0]+(squareSize/2)-2,squareList[c][1]+(squareSize/2)+1)
             }
             //Box Borders
             graphics.strokeStyle="black"
-            // FOR TESTING PURPOSES. REMOVE LATER. Highlights squares with mines.
-            // if (squareList[c][2]==1){
-            //     graphics.strokeStyle="red"
-            // }
+            // On game over, highlights mines.
+            if (squareList[c][2]==1 && gameOver==true){
+                graphics.strokeStyle="red"
+            }
             graphics.strokeRect(squareList[c][0],squareList[c][1],squareSize,squareSize)
             c+=1
             v+=1
@@ -265,7 +314,11 @@ function drawScoreboard(){
     graphics.fillRect(0,canvas.height-100,canvas.width,100)
     graphics.strokeRect(0,canvas.height-100,canvas.width,100)
     graphics.fillStyle="red"
-    graphics.fillText("Remaining Mines: " + currentMineCount,200,350)
+    graphics.fillText("Remaining Mines: " + currentMineCount,50,380)
+    if (gameOver==true){
+        graphics.fillStyle="red"
+        graphics.fillText("You triggered a mine! You lose!",30,330)
+    }
 }
 
 function animate(){
@@ -273,6 +326,5 @@ function animate(){
     drawScoreboard()
 }
 
-initialize()
-window.setInterval(animate, 60/1000)
+
 console.log(rowColCount)
