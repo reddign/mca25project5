@@ -1,10 +1,15 @@
 body {font-family:'Gill Sans', 'Gill Sans MT', 'Calibri', 'Trebuchet MS', sans-serif;
 background-color: rgb(240, 240, 252);
-display: flex;
-justify-content: center;
-align-items: center;
 }
 
+header {
+    background-color:#7054ac;
+    color:rgb(185, 167, 252);
+    padding: 1px;
+    text-align: center;
+    /* border: salmon solid; */
+    border-radius: 5px;
+}
 
 /* Bordered form */
 form {
@@ -48,3 +53,8 @@ form {
     width: 300px;
     padding: 16px;
   }
+
+ .center{
+    display: block;
+    margin-bottom: auto;
+}

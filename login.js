@@ -6,7 +6,7 @@ function login(event){
     var password = loginform.elements["password"].value
 
 
-    if(!username == "coolguy" || password == "123456789"){
+    if(username == "" || password == ""){
         alert("enter correct username and password")
     }else{
 
