@@ -13,3 +13,5 @@ function drawblock(){
 function win(){
     console.log("Checks to see if there is four in a row")
 }
+
+alert("Single Player")
