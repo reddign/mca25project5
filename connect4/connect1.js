@@ -10,7 +10,7 @@ function drawblock(){
     console.log("This draws a red circle")
 }
 
-function win(){
+function checkwin(){
     console.log("Checks to see if there is four in a row")
 }
 
