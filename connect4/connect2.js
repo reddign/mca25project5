@@ -1,8 +1,12 @@
-let canvas = document.querySelector("canvas");
-const graphics = canvas.getContext("2d");
+const ROWS = 6;
+const COLS = 7;
+const board = []
+let currentPlayer = 1;   //1 = red, 2 = yellow
+
+const gameBoard = document.getElementById("game-board");
+const message = document.getElementById("message");
 
 drawboard();
-drawblock();
 
 // function instructions(){  //TODO Make the instructions work, not line broken
 //     graphics.beginPath();
@@ -23,9 +27,7 @@ drawblock();
 // }
 
 
-function dropblock(event){
-    console.log("This allows user to drop block on click")
-}
+
 
 function drawboard(){
     graphics.beginPath();
@@ -38,6 +40,22 @@ function drawboard(){
     graphics.stroke();
 }
 
+function initBoard(){
+    gameBoard.innerHTML = '';
+    for (let r=0; r<ROWS; r++){
+        board[r] = [];
+        for (let c = 0; c < COLS; c++){
+            board[r][c] = 0
+
+            const cell = document.createElement("div");
+            cell.classList.add("cell","empty");
+            cell.dataset.row = r;
+            cell.dataset.col = c;
+            cell.addEventListener("click", handleClick);
+            gameBoard.appendChild(cell);
+        }
+    }
+}
 //draws yellow circle
 function drawblocky(){
     graphics.fillStyle = "yellow";
