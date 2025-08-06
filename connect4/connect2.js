@@ -1,48 +1,15 @@
 const ROWS = 6;
 const COLS = 7;
-const board = []
-let currentPlayer = 1;   //1 = red, 2 = yellow
+const board = [];
+let currentPlayer = 1;  //1 = red, 2 = y
 
 const gameBoard = document.getElementById("game-board");
 const message = document.getElementById("message");
 
-drawboard();
-
-// function instructions(){  //TODO Make the instructions work, not line broken
-//     graphics.beginPath();
-//     graphics.roundRect(10,200,300,200,10);
-//     graphics.fillStyle = '#dce7edcf';
-//     graphics.fill();
-//     graphics.strokeStyle = '#575c5f1a';
-//     graphics.lineWidth = 5;
-
-//     graphics.stroke();
-
-
-//     graphics.fillStyle = "black";
-//     graphics.strokeStyle = "black";
-//     let message = "Instructions:" + "\nPlayers choose yellow or red disks" + "\nThen, take turns and drop the discs into the grid.\n" +
-//     "Use strategy to block opponents while aiming to" + "\nbe the first player to get 4 in a row." 
-//     graphics.fillText(message,25,225);
-// }
-
-
-
-
-function drawboard(){
-    graphics.beginPath();
-    graphics.roundRect(370,5,530,430,10);
-    graphics.fillStyle = '#94d5fdff';
-    graphics.fill();
-    graphics.strokeStyle = '#2da6f1ff';
-    graphics.lineWidth = 5;
-
-    graphics.stroke();
-}
-
+//Initialize board array and render
 function initBoard(){
     gameBoard.innerHTML = '';
-    for (let r=0; r<ROWS; r++){
+    for (let r=0; r< ROWS; r++){
         board[r] = [];
         for (let c = 0; c < COLS; c++){
             board[r][c] = 0
@@ -56,25 +23,85 @@ function initBoard(){
         }
     }
 }
-//draws yellow circle
-function drawblocky(){
-    graphics.fillStyle = "yellow";
-    graphics.beginPath();
-    graphics.arc(x,y,20,0,Math.PI*2);
-    graphics.fill();
-    graphics.closePath();
+
+function handleClick(e){
+    const col = parseInt(e.target.dataset.col);
+    for (let r=ROWS - 1; r>=0; r--){
+        if(board[r][col] ===0){
+            board[r][col] = currentPlayer;
+            updateCell(r,col);
+            if (checkWin(r,col)){
+                message.textContent = `Player ${currentPlayer} wins!`;
+                disableBoard();
+            }else if (isBoardFull()){
+                message.textContent = "It's a tie!";
+                disableBoard();
+            }else{
+                currentPlayer = currentPlayer ===1 ? 2 : 1;
+                message.textContent = `Player ${currentPlayer}'s turn (${currentPlayer ===1 ? "Red" : "Yellow"})`;
+            }
+            break;
+        }
+    }
 }
 
-//Draws red circle
-function drawblockr(){
-    graphics.fillStyle = "red";
-    graphics.beginPath();
-    graphics.arc(x,y,20,0,Math.PI*2);
-    graphics.fill();
-    graphics.closePath();
+function isBoardFull(){
+    for (let c=0; c < COLS; c++){
+        if (board[0][c] === 0){
+            return false;
+        }
+    }
+    return true;
 }
 
-function checkwin(){
-    console.log("Checks to see if there is four in a row")
+function updateCell(row,col){
+    const cellIndex = row*COLS + col;
+    const cell = gameBoard.children[cellIndex];
+    cell.classList.remove("empty");
+    const disc = document.createElement("div");
+    disc.classList.add("disc", currentPlayer ===1 ? "red": "yellow");
+    cell.appendChild(disc);
 }
 
+function disableBoard(){
+    const allCells = document.querySelectorAll(".cell");
+    allCells.forEach(cell => cell.removeEventListener("click", handleClick));
+}
+
+function checkWin(row,col){
+    const directions = [
+        [0,1],
+        [1,0],
+        [1,1],
+        [1,-1]
+    ];
+
+    for (const [dr,dc] of directions){
+        let count = 1;
+        count += countDiscs(row, col, dr, dc);
+        count += countDiscs (row, col, -dr, -dc);
+        if (count >=4) return true;
+    }
+
+    return false;
+}
+
+function countDiscs(row, col, dr, dc){
+    const player = board[row][col];
+    let r = row +dr;
+    let c = col +dc;
+    let count = 0;
+
+    while (
+        r >= 0 && r < ROWS &&
+        c >= 0 && c < COLS &&
+        board[r][c] === player
+    ) {
+        count++;
+        r += dr;
+        c += dc;
+    }
+    return count;
+}
+
+initBoard();

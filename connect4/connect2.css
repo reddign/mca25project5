@@ -1,0 +1,44 @@
+
+body{
+    text-align:center;
+    font-family: Ariel, sans-serif;
+    background: #bcf9f0;
+}
+
+#game-board {
+    display: grid;
+    grid-template-columns: repeat(7, 60px);
+    gap: 5px;
+    justify-content: center;
+    margin: 20px auto;
+    
+}
+
+.cell{
+    width: 60px;
+    height: 60px;
+    background-color: #3498db;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.cell.empty:hover {
+    background-color: #2980b9;
+}
+
+.disc {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.red {
+    background-color: red;
+}
+
+.yellow {
+    background-color: yellow;
+}

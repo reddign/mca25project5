@@ -1,7 +1,7 @@
 body{
     font-family:Arial, Helvetica, sans-serif;
     max-width: 800px;
-    background-color:#f7b4ca;
+    background-color:#f8bbcf;
     padding: 20px;
     margin: 0 auto;
 }
@@ -16,7 +16,7 @@ h1{
     margin: 0;
     padding: 10;
     overflow: hidden;
-    background-color: #f69eb4;
+    background-color: #fa59dc;
 }
 
 .single {
