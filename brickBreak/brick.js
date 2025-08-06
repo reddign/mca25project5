@@ -60,6 +60,8 @@ function animate(){
             gameOverText()
             movePaddle()
             drawPaddle(padX,padY)
+            moveBall()
+            drawBall(ballX,ballY)
         }
         else{
             graphics.fillStyle="rgb(255,131,131)"
@@ -109,7 +111,7 @@ function moveBall(){
         
         resetBall()
     }
-    if (ballState=="float"){
+    if (ballState=="float" || lives==0){
         ballX=padX+25
         if ((key=="a"||key=="ArrowLeft")){
             ballDx=-1
@@ -117,7 +119,7 @@ function moveBall(){
         if ((key=="d"||key=="ArrowRight")){
             ballDx=1
         }
-        console.log(ballDx)
+        
     }
     //Move ball if launch
     else{
@@ -179,10 +181,14 @@ function moveBall(){
         ballY+=ballDy
     }
     //Ball Launch
-    if ( (key=="w" || key=="ArrowUp") && ballState=="float"){
+    if ( (key=="w" || key=="ArrowUp") && ballState=="float" || lives==0){
+        if (lives==0){
+            ballDx=0
+        }
+        else{
         ballState="launch"
         ballDy=-1
-        console.log(ballState)
+        }
     }
 }
 
@@ -220,17 +226,23 @@ function drawScoreboard(){
     graphics.fillText("Lives: " + lives,200,10)
 }
 function gameOverText(){
+    console.log(ballX, ballState)
     graphics.fillStyle="rgb(255,131,131)"
     graphics.font="arial"
     graphics.fillText("Your final score: " + score,100,200)
     graphics.fillText("Play again? ",125,220)
+    graphics.strokeStyle="rgb(255,131,131)"
+    graphics.strokeRect(35,260,50,500)
+    graphics.strokeRect(185,260,50,500)
     graphics.fillText("YES",50,300)
     graphics.fillText("NO",200,300)
-    if ( (key=="w" || key=="ArrowUp") && ((padX<100 && padX>50)|| (padX+80<100) ) &&
+    graphics.strokeStyle="black"
+    if ( (key=="w" || key=="ArrowUp") && ((ballX>30 && ballX<100)) &&
     ballState!="gameOver"){
         initialize()
+        
     }
-    if ( (key=="w" || key=="ArrowUp") && (padX>190 )){
+    if ( (key=="w" || key=="ArrowUp") && (ballX>180 && ballX<250)){
         ballState="gameOver"
     }
 }
