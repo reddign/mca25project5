@@ -3,13 +3,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connect 4-Multiplayer</title>
-    <link rel="stylesheet" href="connect2.css" />
+    <link rel="stylesheet" href="game.css" />
     <img src="Images/connect4title.png" id="title" class="title" width="500" height="100" >
 
 </head>
 <body>
-    <div id="game-board"></div>
+    <div class="container">
+        <div class="my-box">
+            <p><u>Instructions:</u>
+                Players choose yellow or red discs. Then, take turns to drop the discs into the grid,
+                starting in the middle or at the edge to stack their colored discs upwards, 
+                horizontally, or diagonally. Use strategy to block opponents while 
+                aiming to be the first player to get 4 in a row to win.
+            </p>
+        </div>
+        <div id="game-board"></div>
+    </div>
     <p id="message">Player 1's turn (Red)</p>
+
 
     <script src="connect2.js"></script>
 </body>
