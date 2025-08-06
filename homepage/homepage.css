@@ -8,7 +8,17 @@ header{
 
 body{
     background-color: rgb(240, 240, 252);
+    font-family:'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif
 
+}
+
+h1 {
+    text-align: center;
+}
+
+h3 {
+    text-align: center;
+    color:#7054ac;
 }
 
 ul {
@@ -38,7 +48,7 @@ li a{
 }
 
 li a:hover {
-    background-color:rgb(107, 93, 151);
+    background-color:hsla(253, 24%, 46%, 0.664);
     border-radius: 6px;
     
 }
@@ -53,3 +63,7 @@ li a:hover {
     margin-left: auto;
     margin-right: auto;
 }
+
+/* .dropdown button{
+
+} */
