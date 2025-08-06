@@ -1,7 +1,7 @@
 const ROWS = 6;
 const COLS = 7;
 const board = [];
-let currentPlayer = 1;  //1 = red, 2 = y
+let currentPlayer = 1;  //1 = red, 2 = yellow
 
 const gameBoard = document.getElementById("game-board");
 const message = document.getElementById("message");
