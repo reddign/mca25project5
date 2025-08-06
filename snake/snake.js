@@ -61,7 +61,7 @@ function checkSnake(){
 }
 function pause(){
     let x=1;
-    while(x<1000000000000000){
+    while(x<1000000000){
         x++;
     }
 }
