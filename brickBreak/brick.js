@@ -19,6 +19,7 @@ let blockRow=1
 let blocksRemaining=0
 let lives=3
 let score=0
+graphics.font="15px Courier New"
 //Block List. P1= Left, P2= Top, P3=State (0=Ded, 1 = Alive)
 let blockList=[
     [-500,-500,1]
@@ -38,9 +39,23 @@ document.addEventListener("keyup", function keyCheck(event){
     key="none"
 })
 
+function scoreCheck(event){
+    event.preventDefault();
+    
+    sendForm = document.getElementById("sender")
+    var inputScore= sendForm.elements["score"].value
+    console.log(inputScore)
+    console.log(score)
+    if (inputScore==score){
+        sendForm.submit()
+    }
+    else{
+        console.log(inputScore + " is NOT " + score + ", you liar!")
+    }
+}
 
 spawnBlocks()
-window.setInterval(animate, 60/1000)
+window.setInterval(animate, 30/1000)
 
 
 spawnBlocks()
@@ -207,6 +222,7 @@ function spawnBlocks(){
             v+=1
         }
         blocksRemaining=35
+        speedMulti*=1.01
     }
 }
 
@@ -222,20 +238,21 @@ function drawBlocks(){
 function drawScoreboard(){
     graphics.fillStyle="lime"
     graphics.font="arial"
-    graphics.fillText("Score: " + score,10,10)
-    graphics.fillText("Lives: " + lives,200,10)
+    graphics.fillText("Score: " + score,10,20)
+    graphics.fillText("Lives: " + lives,200,20)
 }
 function gameOverText(){
     console.log(ballX, ballState)
     graphics.fillStyle="rgb(255,131,131)"
     graphics.font="arial"
-    graphics.fillText("Your final score: " + score,100,200)
-    graphics.fillText("Play again? ",125,220)
+    graphics.fillText("Your final score:",55,180)
+    graphics.fillText(score,90,200)
+    graphics.fillText("Play again? ",90,220)
     graphics.strokeStyle="rgb(255,131,131)"
     graphics.strokeRect(35,260,50,500)
     graphics.strokeRect(185,260,50,500)
-    graphics.fillText("YES",50,300)
-    graphics.fillText("NO",200,300)
+    graphics.fillText("YES",40,300)
+    graphics.fillText("NO",195,300)
     graphics.strokeStyle="black"
     if ( (key=="w" || key=="ArrowUp") && ((ballX>30 && ballX<100)) &&
     ballState!="gameOver"){
