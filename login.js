@@ -2,7 +2,7 @@ function login(event){
     event.preventDefault();
 
     loginform = document.getElementById("login")
-    var username = loginform.elements["user"].value
+    var username = loginform.elements["username"].value
     var password = loginform.elements["password"].value
 
 

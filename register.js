@@ -1,8 +1,8 @@
 function register(event){
     event.preventDefault();
 
-    loginform = document.getElementById("register")
-    var username = loginform.elements["user"].value
+    var loginform = document.getElementById("register")
+    var username = loginform.elements["username"].value
     var password = loginform.elements["password"].value
     var email = loginform.elements["email"].value
 
@@ -12,7 +12,7 @@ function register(event){
     }else if(email.length >=12 && email.includes("@") && email.includes(".") && 
     password.length >=8){
 
-        loginform.submit();
+        loginform.submit(); 
         // alert('Go away,'+ (username) + '! You are not a valid user.')
     }
     
