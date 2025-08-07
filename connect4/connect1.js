@@ -131,9 +131,8 @@ function isBoardFull(){
 }
 
 function disableBoard(){
-    gameBoard.querySelectorAll(".cell").forEach(cell => {
-        cell.computedStyleMap.pointerEvents = "none";
-    })
+    const allCells = document.querySelectorAll(".cell");
+    allCells.forEach(cell => cell.removeEventListener("click", handleClick));
 }
 
 inBoard();
