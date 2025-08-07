@@ -64,5 +64,25 @@ body{
 
 .container {
   display: flex; 
+}
 
+.title{
+    display: flex;
+    margin-left: 375px;
+}
+
+.link{
+    background-color: #28d9ec; 
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    margin:250px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 5px;
+    margin-bottom: 60px;
 }
