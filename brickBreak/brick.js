@@ -28,6 +28,12 @@ let blockList=[
 ]
 
 
+window.addEventListener("keydown", function(e) {
+  // Check if the pressed key is an arrow key or the Spacebar
+  if (["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].indexOf(e.code) > -1) {
+    e.preventDefault(); // Prevent the default scrolling behavior
+  }
+}, false);
 
 document.addEventListener("keydown", function keyCheck(event){
     // console.log(event.key)
