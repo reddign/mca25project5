@@ -4,6 +4,8 @@
 
 const canvas= document.querySelector("canvas")
 const graphics = canvas.getContext("2d")
+graphics.fillStyle="white"
+graphics.fillRect(1,1,298,398)
 graphics.strokeRect(0,0,canvas.width,canvas.height)
 //TODO: Implement diagonal crosses, game resetting.
 
