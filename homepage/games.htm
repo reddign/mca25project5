@@ -1,0 +1,58 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="homepage.css" rel="stylesheet">
+    <title>Water Guys Games</title>
+</head>
+<body>
+    <header>
+        <a href="../homepage/homepage.htm" class="logo">Water Guys Games</a>
+        <nav class="navbar">
+            <a href="../login.htm" >Login</a>
+            <a href="credits.htm">Credits</a>
+            <a href="games.htm">Games</a>
+            <div class="dropdown">
+                <button>About Us</button>
+                <div class="content">
+                    <a href="../About/Sharon.htm">Sharon</a>
+                    <a href="../About/Beckett.htm">Beckett</a>
+                    <a href="../About/Henry.htm">Henry</a>
+                    <a href="../About/Britney.htm">Britney</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+<BR><BR><BR><BR><BR>
+    <!-- diff map to make images clickable -->
+    <map id="mine">
+        <area id="minesweeper" shape="rect" href="../minesweeper/index.htm" 
+        coords="80,30,330,280">
+    </map>
+    <map id="tic">
+        <area id="tictactoe" shape="rect" href="../TicTacToe/index.htm" 
+        coords="80,30,330,280">
+    </map>
+    <map id="brick">
+        <area id="brickbreaker" shape="rect" href="../brickBreak/index.htm" 
+        coords="80,30,280,280">
+    </map>
+
+    <!-- figure and figcaption allow name under image -->
+
+    <figure>
+    <img id="minesweeper" src="../homepage/images/Minesweeper.png" alt="minesweeper game" height="250px" class = "center" usemap="#mine">
+    <figcaption>Minesweeper</figcaption>
+    </figure>
+
+    <figure>
+    <img id="tictactoe" src="../homepage/images/TicTacToe.png" alt="tictactoe game" height="250px" class = "center" usemap="#tic">
+    <figcaption>TicTacToe</figcaption>
+    </figure>
+
+    <figure>
+    <img id="brickbreaker" src="../homepage/images/BrickBreaker.png" alt="brickbreaker game" height="250px" class = "center" usemap="#brick">
+    <figcaption>Brick Breaker</figcaption>
+    </figure>
+</body>
+</html>
