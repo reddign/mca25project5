@@ -1,0 +1,63 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: rgb(240, 240, 252);
+    font-family:'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
+    min-height: 100vh;
+    background: url('../lovecalc/love.jpg');
+    background-size:contain;
+    background-position:left;
+}
+
+header{
+    font-family: 'Pinyon Script',cursive;
+    font-size: 25px;
+    color: #ff5a72;
+    text-align: center;
+}
+
+h3{
+    font-family: 'Times New Roman', Times, serif;
+    color:#fe9aa9;
+    text-align: center;
+}
+
+.lovegroup{
+    text-align: center;
+}
+
+input[type=text]{
+    border: 1px solid #ffabb9;
+    border-radius: 7px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#result{
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 20px;
+    color: #ff5771;
+}
+
+button {
+    background-color: #ffb6c1; /* Light pink */
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 25px; /* Rounded corners */
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: #ff8fab; /* Darker pink on hover */
+    transform: translateY(-2px); /* Slight lift on hover */
+}
