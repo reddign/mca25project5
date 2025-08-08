@@ -5,10 +5,10 @@
 }
 
 body{
-    background-color: rgb(240, 240, 252);
+    background-color: rgb(55, 55, 171);
     font-family:'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
     min-height: 100vh;
-    background: url('../homepage/images/download\ \(1\).jpg') no-repeat;
+    background: url('../homepage/images/dark.jpg') no-repeat;
     background-size: cover;
     background-position: center;
 }
@@ -19,7 +19,7 @@ header {
     left: 0;
     width: 100%;
     padding: 20px 100px;
-    background: hsla(198, 100%, 83%, 0.571);
+    background: hsla(197, 22%, 13%, 0.571);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -28,26 +28,26 @@ header {
 
 h1 {
     text-align: center;
-    color: #4b3182;
+    color: #6944b2;
 }
 
 h3 {
     text-align: center;
-    color:#7054ac;
+    color:#5e478c;
 }
 
 .logo{
     font-size: 30px;
     font-weight: 700;
     text-decoration: none;
-    color: rgb(91, 146, 249);
+    color: rgb(64, 100, 168);
 }
 
 .navbar a {
     position: relative;
     font-size: 20px;
     font-weight: 500;
-    color: rgb(38, 64, 112);
+    color: rgb(73, 121, 210);
     text-decoration: none;
     margin-left: 40px;
 }
@@ -59,7 +59,7 @@ h3 {
     left: 0;
     width: 0;
     height: 2px;
-    background: #7054ac;
+    background: #7d5ec0;
     transition: .3s;
 }
 
@@ -68,7 +68,7 @@ h3 {
 }
 
 .text{
-    color:rgb(185, 167, 252);
+    color:rgb(73, 121, 210);
 }
 
 .center{
@@ -84,7 +84,7 @@ figure {
 }
 
 figcaption {
-  color: rgb(65, 111, 185);
+  color: rgb(78, 132, 212);
   font-size: 20px;
   font-weight: 600;
   padding: 2px;
@@ -97,7 +97,7 @@ figcaption {
 
 .dropdown button{
     background-color: transparent;
-    color: rgb(38, 64, 112);
+    color: rgb(43, 72, 130);
     font-size: 20px;
     font-weight: 500;
     padding: 10px 30px;
@@ -107,7 +107,7 @@ figcaption {
 
 .dropdown a{
     display:block;
-    color: rgb(38, 64, 112);
+    color: rgb(73, 121, 210);
     text-decoration: none;
     padding: 10px 15px;
 }
@@ -115,7 +115,7 @@ figcaption {
 .dropdown .content{
     display: none;
     position: absolute;
-    background-color: hsla(198, 100%, 83%, 0.623);
+    background-color: hsla(197, 20%, 30%, 0.623);
     min-width: 100px;
 }
 
@@ -124,22 +124,15 @@ figcaption {
 }
 
 .dropdown:hover button{
-    background-color: rgba(91, 170, 254, 0.395);
+    background-color: rgba(43, 80, 120, 0.395);
 }
 
 .dropdown a:hover{
-    background-color: hsla(271, 76%, 53%, 0.715);
+    background-color: hsla(271, 68%, 46%, 0.527);
 }
 
 .water{
     margin-top: 0px;
-    position: fixed;
-    z-index: 1;
-}
-
-button.change{
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .lol{
