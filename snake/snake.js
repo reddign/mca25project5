@@ -1,211 +1,153 @@
 let canvas = document.querySelector("canvas");
-let graphics = canvas.getContext('2d');
-let x=20;
-let y=100;
-let snakex = 50;
-let snakey = 50;
-let tail = [];
-let snakeWidth = 20, snakeHeight = 20;
-let FPS = 500;
+let ctx = canvas.getContext("2d");
+const segmentSize = 20;
+const foodSize = 15;
+const updatesPerSecond = 10;
+const growAmount = 1;
+
+let snakeSegments = [{ x: 50, y: 50 }];
 let direction = "NONE";
-let lastDirection = "";
 let lives = 3;
-let pauseFrames= 0;
-let snakeColor="white";
-//Defines food. P0:X, P1: Y, P2: State
-let food=[50,50,1]
-console.log(food)
-console.log(Math.floor(10+Math.random()*370))
- makeFood();
-function animate(){
-    // If pauseFrames are not active, run animation.
-    if (pauseFrames==0){
-        clear();
-        snake();
-        // console.log(snakex,snakey);
-        if(lives>0){
-            moveSnake();
-            checkSnake();
-            
-            drawFood();
-            if(checkSnakeEatsFood()){
-                console.log("Snake ate food.")
-                collectFood();
-            }
-            //collectFood();
-        }
-    }
-    // Otherwise, reduce pauseFrames. It will eventually go back to 0.
-    else{
-        pauseFrames-=1
-    }
-    
-}
-function snake(){
-    graphics.fillStyle = snakeColor
-    graphics.fillRect(snakex,snakey,snakeWidth,snakeHeight);
-    //draw tail
-    for(let i=0; i<tail.length;i++){
-        graphics.fillStyle = "blue";
-        graphics.fillRect(tail[i][0],tail[i][1],snakeWidth,snakeHeight);
-    }
-}
-function clear(){
-    graphics.fillStyle = "black"
-    graphics.fillRect(0,0,canvas.width,canvas.height);
-}
-//Snake Functions
-function moveSnake(){
-    if(direction=="UP"){
-        moveSnakeUp()
-    }else if(direction=="DOWN"){
-        moveSnakeDown()
-    }else if(direction=="LEFT"){
-        moveSnakeLeft()
-    }else if(direction=="RIGHT"){
-        moveSnakeRight()
-    }
-    
-}
-function moveSnakeDown(){
-    snakey += 1;
-    for(let i=0; i<tail.length;i++){
-     //tail[i][0] -= 1
-     tail[i][1] += 1
-    
-    }
-}
-function moveSnakeUp(){
-    snakey -= 1;
-    for(let i=0; i<tail.length;i++){
-    // tail[i][0] -= 1
-     tail[i][1] -= 1
-    
-    }
-}
-function moveSnakeRight(){
-    snakex += 1;
-    for(let i=0; i<tail.length;i++){
-     tail[i][0] += 1
-    // tail[i][1] += 1
-    
-    }
-    
-}
-function moveSnakeLeft(){
-    snakex -= 1;
-    for(let i=0; i<tail.length;i++){
-     tail[i][0] -= 1
-    // tail[i][1] -= 1
-    
-    }
-}
-function checkSnake(){
-    if(snakex < 0 || snakey < 0 || snakex+snakeWidth > canvas.width || snakey+snakeHeight > canvas.height){
-        resetSnake();
+let pauseFrames = 0;
+let food = { x: 0, y: 0, isEaten: true };
 
+spawnFood();
+setInterval(runFrame, 1000 / updatesPerSecond);
+
+function runFrame() {
+  if (pauseFrames > 0) {
+    pauseFrames--;
+    return;
+  }
+
+  let head = { ...snakeSegments[0] };
+  switch (direction) {
+    case "UP": head.y -= segmentSize; break;
+    case "DOWN": head.y += segmentSize; break;
+    case "LEFT": head.x -= segmentSize; break;
+    case "RIGHT": head.x += segmentSize; break;
+  }
+  snakeSegments.unshift(head);
+
+  if (isOverlap(
+        head.x, head.y, segmentSize, segmentSize,
+        food.x, food.y, foodSize, foodSize
+      )) {
+    food.isEaten = true;
+    for (let i = 0; i < growAmount; i++) {
+      let last = snakeSegments[snakeSegments.length - 1];
+      snakeSegments.push({ x: last.x, y: last.y });
     }
-}
-function resetSnake(){
-    lives-=1;
-    direction="";
-    snakex=50;
-    snakey=50;
-    // Pauses the game for a bit.
-    pauseFrames=200;
+  } else {
+    snakeSegments.pop();
+  }
+
+  if (food.isEaten) {
+    spawnFood();
+  }
+
+  clearScreen();
+  drawFood();
+  drawSnake();
+
+  if (hitWall(head) || hitSelf(head)) {
+    loseLife();
+  }
 }
 
-function pause(){
-    let x=1;
+function clearScreen() {
+  ctx.fillStyle = "black";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
-function makeFood(){
-    if (food[2]==0){
-        rngX=Math.floor(10+Math.random()*370)
-        rngY=Math.floor(10+Math.random()*370)
-        food=[rngX,rngY,1]
-        console.log(food)
-    }
-}
-function drawFood(){
-    graphics.fillStyle="red"
-    graphics.fillRect(food[0],food[1],15,15)
-}
-function checkSnakeEatsFood(){
-    
-    var rectSnake = {
-        left: snakex,
-        top: snakey,
-        right: snakex + snakeWidth,
-        bottom: snakey + snakeHeight,
-        };
+function drawSnake() {
+  ctx.fillStyle = "white";
+  ctx.fillRect(
+    snakeSegments[0].x,
+    snakeSegments[0].y,
+    segmentSize,
+    segmentSize
+  );
 
-    var rectFood = {
-        left: food[0],
-        top: food[1],
-        right: food[0] + 15,
-        bottom: food[1] + 15,
-        };
-    let ateFood = intersectRect(rectSnake, rectFood);
-    if(ateFood){
-        snakeColor="yellow";
-        return true;
-    }else{
-        return false;
-    }
-}
-function intersectRect(r1, r2) {
-  return !(r2.left > r1.right ||
-    r2.right < r1.left ||
-    r2.top > r1.bottom ||
-    r2.bottom < r1.top);
-}
-function collectFood(){
-    food[2]=0
-    makeFood();
-    growSnake();
-    
-}
-function growSnake(){
-
-    let newx = snakex;
-    let newy = snakey;
-    if(direction=="UP"){
-        newy += snakeHeight
-    }
-    if(direction=="DOWN"){
-        newy -= snakeHeight
-    }
-    if(direction=="LEFT"){
-        newx += snakeWidth
-    }
-    if(direction=="RIGHT"){
-        newx -= snakeWidth
-    }
-    let segment = [newx,newy];
-    tail.push(segment);
-    console.log(tail);
+  ctx.fillStyle = "blue";
+  for (let i = 1; i < snakeSegments.length; i++) {
+    ctx.fillRect(
+      snakeSegments[i].x,
+      snakeSegments[i].y,
+      segmentSize,
+      segmentSize
+    );
+  }
 }
 
-document.addEventListener("keydown",function(event){
-    const key = event.key;
-    const code = event.code;
-    console.log(`Key pressed: ${key}, Code:${code}`);
+function spawnFood() {
+  food.x = Math.floor(10 + Math.random() * (canvas.width - 20));
+  food.y = Math.floor(10 + Math.random() * (canvas.height - 20));
+  food.isEaten = false;
+}
 
-    if(key==="ArrowDown"){
-        direction = "DOWN";
+function drawFood() {
+  if (!food.isEaten) {
+    ctx.fillStyle = "red";
+    ctx.fillRect(food.x, food.y, foodSize, foodSize);
+  }
+}
+
+function isOverlap(x1,y1,w1,h1, x2,y2,w2,h2) {
+  return !(
+    x2 >  x1 + w1 ||
+    x2 + w2 < x1 ||
+    y2 >  y1 + h1 ||
+    y2 + h2 < y1
+  );
+}
+
+function hitWall(head) {
+  return (
+    head.x < 0 ||
+    head.y < 0 ||
+    head.x + segmentSize > canvas.width ||
+    head.y + segmentSize > canvas.height
+  );
+}
+
+function hitSelf(head) {
+  for (let i = 1; i < snakeSegments.length; i++) {
+    if (
+      head.x === snakeSegments[i].x &&
+      head.y === snakeSegments[i].y
+    ) {
+      return true;
     }
-    if(key==="ArrowUp"){
-         direction = "UP";
-    }
-    if(key==="ArrowLeft"){
-        direction = "LEFT";
-    }
-    if(key==="ArrowRight"){
-         direction = "RIGHT";
-    }
+  }
+  return false;
+}
+
+function loseLife() {
+  lives--;
+  snakeSegments = [{ x: 50, y: 50 }];
+  direction = "NONE";
+  pauseFrames = updatesPerSecond * 2;
+  food.isEaten = true;
+}
+
+const oppositeDirections = {
+  UP: "DOWN",
+  DOWN: "UP",
+  LEFT: "RIGHT",
+  RIGHT: "LEFT",
+  NONE: ""
+};
+
+document.addEventListener("keydown", e => {
+  const keyToDir = {
+    ArrowUp: "UP",
+    ArrowDown: "DOWN",
+    ArrowLeft: "LEFT",
+    ArrowRight: "RIGHT"
+  };
+  let newDir = keyToDir[e.key];
+  if (newDir && newDir !== oppositeDirections[direction]) {
+    direction = newDir;
+  }
 });
-
-
-
-window.setInterval(animate,FPS/1000);

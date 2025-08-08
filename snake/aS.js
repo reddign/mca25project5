@@ -1,119 +1,164 @@
 let canvas = document.querySelector("canvas");
 let graphics = canvas.getContext('2d');
-let x=20;
-let y=100;
+
 let snakex = 50;
 let snakey = 50;
 let snakeWidth = 20, snakeHeight = 20;
-let FPS = 500;
+let FPS = 60;
 let direction = "NONE";
 let lastDirection = "";
 let lives = 3;
-let pauseFrames= 0;
-//Defines food. P0:X, P1: Y, P2: State
-let food=[50,50,0]
-console.log(food)
-console.log(Math.floor(10+Math.random()*370))
-function animate(){
-    // If pauseFrames are not active, run animation.
-    if (pauseFrames==0){
+let pauseFrames = 0;
+let snakeColor = "white";
+let changeKeyCount = 0;
+let tail = [];
+let tailLength = 0; // Tracks how long the tail should be
+
+// Defines food: [X, Y, State]
+let food = [50, 50, 0];
+makeFood();
+
+function animate() {
+    if (pauseFrames === 0) {
         clear();
         snake();
-        // console.log(snakex,snakey);
-        if(lives>0){
+        changeKeyCount++;
+
+        if (lives > 0) {
             moveSnake();
+            moveTail();
             checkSnake();
-            makeFood();
-            drawFood()
+            drawFood();
+
+            if (checkSnakeEatsFood()) {
+                collectFood();
+            }
         }
-    }
-    // Otherwise, reduce pauseFrames. It will eventually go back to 0.
-    else{
-        pauseFrames-=1
-    }
-    
-}
-function snake(){
-    graphics.fillStyle = "white"
-    graphics.fillRect(snakex,snakey,snakeWidth,snakeHeight);
-}
-function clear(){
-    graphics.fillStyle = "black"
-    graphics.fillRect(0,0,canvas.width,canvas.height);
-}
-//Snake Functions
-function moveSnake(){
-    if(direction=="UP"){
-        moveSnakeUp()
-    }else if(direction=="DOWN"){
-        moveSnakeDown()
-    }else if(direction=="LEFT"){
-        moveSnakeLeft()
-    }else if(direction=="RIGHT"){
-        moveSnakeRight()
+    } else {
+        pauseFrames -= 1;
     }
 }
-function moveSnakeDown(){
-    snakey += 1;
+
+function snake() {
+    graphics.fillStyle = snakeColor;
+    graphics.fillRect(snakex, snakey, snakeWidth, snakeHeight);
+
+    graphics.fillStyle = "blue";
+    for (let i = 0; i < tail.length; i++) {
+        graphics.fillRect(tail[i][0], tail[i][1], snakeWidth, snakeHeight);
+    }
 }
-function moveSnakeUp(){
-    snakey -= 1;
+
+function clear() {
+    graphics.fillStyle = "black";
+    graphics.fillRect(0, 0, canvas.width, canvas.height);
 }
-function moveSnakeRight(){
-    snakex += 1;
+
+function moveSnake() {
+    if (direction === "UP") snakey -= snakeHeight;
+    else if (direction === "DOWN") snakey += snakeHeight;
+    else if (direction === "LEFT") snakex -= snakeWidth;
+    else if (direction === "RIGHT") snakex += snakeWidth;
 }
-function moveSnakeLeft(){
-    snakex -= 1;
+
+function moveTail() {
+    tail.unshift([snakex, snakey]);
+    while (tail.length > tailLength) {
+        tail.pop();
+    }
 }
-function checkSnake(){
-    if(snakex < 0 || snakey < 0 || snakex+snakeWidth > canvas.width || snakey+snakeHeight > canvas.height){
+
+function checkSnake() {
+    if (
+        snakex < 0 || snakey < 0 ||
+        snakex + snakeWidth > canvas.width ||
+        snakey + snakeHeight > canvas.height
+    ) {
         resetSnake();
-
     }
 }
-function resetSnake(){
-    lives-=1;
-    direction="";
-    snakex=50;
-    snakey=50;
-    // Pauses the game for a bit.
-    pauseFrames=200;
+
+function resetSnake() {
+    lives -= 1;
+    direction = "NONE";
+    snakex = 50;
+    snakey = 50;
+    tail = [];
+    tailLength = 0;
+    pauseFrames = 60;
 }
 
-function pause(){
-    let x=1;
-}
-
-function makeFood(){
-    if (food[2]==0){
-        rngX=Math.floor(10+Math.random()*370)
-        rngY=Math.floor(10+Math.random()*370)
-        food=[rngX,rngY,1]
-        console.log(food)
+function makeFood() {
+    if (food[2] === 0) {
+        let rngX = Math.floor(10 + Math.random() * (canvas.width - 25));
+        let rngY = Math.floor(10 + Math.random() * (canvas.height - 25));
+        food = [rngX, rngY, 1];
     }
 }
-function drawFood(){
-    graphics.fillStyle="red"
-    graphics.fillRect(food[0],food[1],15,15)
+
+function drawFood() {
+    graphics.fillStyle = "red";
+    graphics.fillRect(food[0], food[1], 15, 15);
 }
 
-document.addEventListener("keydown",function(event){
+function checkSnakeEatsFood() {
+    let rectSnake = {
+        left: snakex,
+        top: snakey,
+        right: snakex + snakeWidth,
+        bottom: snakey + snakeHeight,
+    };
+
+    let rectFood = {
+        left: food[0],
+        top: food[1],
+        right: food[0] + 15,
+        bottom: food[1] + 15,
+    };
+
+    return intersectRect(rectSnake, rectFood);
+}
+
+function intersectRect(r1, r2) {
+    return !(
+        r2.left > r1.right ||
+        r2.right < r1.left ||
+        r2.top > r1.bottom ||
+        r2.bottom < r1.top
+    );
+}
+
+function collectFood() {
+    food[2] = 0;
+    makeFood();
+    growSnake();
+    snakeColor = "yellow";
+}
+
+function growSnake() {
+    tailLength += 1;
+}
+
+document.addEventListener("keydown", function (event) {
     const key = event.key;
-    const code = event.code;
-    console.log(`Key pressed: ${key}, Code:${code}`);
-
-    if(key==="ArrowDown"){
-        direction = "DOWN";
-    }
-    if(key==="ArrowUp"){
-         direction = "UP";
-    }
-    if(key==="ArrowLeft"){
-        direction = "LEFT";
-    }
-    if(key==="ArrowRight"){
-         direction = "RIGHT";
+    if (changeKeyCount >= snakeWidth) {
+        if (key === "ArrowDown" && direction !== "UP") {
+            direction = "DOWN";
+            changeKeyCount = 0;
+        }
+        if (key === "ArrowUp" && direction !== "DOWN") {
+            direction = "UP";
+            changeKeyCount = 0;
+        }
+        if (key === "ArrowLeft" && direction !== "RIGHT") {
+            direction = "LEFT";
+            changeKeyCount = 0;
+        }
+        if (key === "ArrowRight" && direction !== "LEFT") {
+            direction = "RIGHT";
+            changeKeyCount = 0;
+        }
     }
 });
 
-window.setInterval(animate,FPS/1000);
+window.setInterval(animate, 1000 / FPS);
